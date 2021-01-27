@@ -13,5 +13,5 @@ location: Seattle
 #  consumer_secret: YOUR CONSUMER SECRET HERE
 #  access_token_key: YOUR ACCESS TOKEN KEY HERE
 #  access_token_secret: YOUR ACCESS TOKEN SECRET HERE
-## To include the weather report (optional), set up a dark sky API key at https://darksky.net/dev
-#darksky_key: YOUR DARKSKY KEY HERE
+## To include the weather report (optional), set up a open weather API key at https://openweathermap.org
+#openweather_key: YOUR OPEN WEATHER KEY HERE

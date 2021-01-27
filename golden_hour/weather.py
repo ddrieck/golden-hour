@@ -1,78 +1,73 @@
 # -*- coding: utf-8 -*-
 import datetime
 from random import choice
+from openweather import get_forecast
 
-from darksky import forecast as get_forecast
-
-
-def get_sunset_forecast(darksky_key, sunset_time, lat_long):
+def get_sunset_forecast(openweather_key, lat, long):
     # Get the forecast from *just before* sunset to avoid night-themed emoji
-    just_before_sunset_time = sunset_time - datetime.timedelta(minutes=10)
-    with get_forecast(darksky_key, *lat_long, time=just_before_sunset_time.isoformat()) as forecast:
-        return forecast
+    forecast = get_forecast(openweather_key, lat, long)
 
+    return forecast
 
 def get_status_text(forecast, sunset_time):
     hourly = forecast['hourly']
-    units = forecast['flags']['units']
-    currently = forecast['currently']
+    current = forecast['current']
 
     return '\n'.join(
         filter(None, [
             '🌅 sunset at {}\n'.format(sunset_time.strftime('%I:%M%p')),
-            summary(hourly, currently),
-            temp(currently, units),
-            cloudiness(currently),
-            precip(currently),
-            wind(currently),
-            visibility(currently),
-            nearest_storm(currently),
+            summary(hourly, current),
+            temp(current),
+            cloudiness(current),
+            precip(hourly, current),
+            wind(current),
+            visibility(current),
         ])
     )
 
 
-def summary(hourly, currently):
-    summ = hourly['data'][0]['summary']
+def summary(hourly, current):
+    summ = hourly[0]['weather'][0]["description"]
 
-    icon = currently['icon']
-    cloud_cover = currently['cloudCover']
-    temperature = currently['temperature']
+    icon = current['weather'][0]['icon']
+    cloud_cover = current['clouds']
+    temperature = current['temp']
 
     return '{} {}'.format(
         get_emoji(icon, temperature, cloud_cover),
         summ.lower()
     )
 
-def temp(currently, units):
-    temperature = currently['temperature']
-    apparent_temp = currently['apparentTemperature']
+def temp(current):
+    temperature = current['temp']
+    feels_like = current['feels_like']
 
     feels_like = (
         ''
-        if round(temperature) == round(apparent_temp)
-        else ' (feels like {})'.format(display_temp(apparent_temp, units))
+        if round(temperature) == round(feels_like)
+        else ' (feels like {})'.format(display_temp(feels_like))
     )
 
     return '🌡 {}{}'.format(
-        display_temp(temperature, units),
+        display_temp(temperature),
         feels_like
     )
 
 
-def cloudiness(currently):
-    cloud_cover = currently['cloudCover']
+def cloudiness(current):
+    cloud_cover = current['clouds']
 
-    if cloud_cover > 0.01:
+    if cloud_cover > 1:
         return '{} {}% cloud cover'.format(
             get_cloud_cover_emoji(cloud_cover),
-            round(cloud_cover * 100)
+            round(cloud_cover)
         )
 
-def precip(currently):
-    cloud_cover = currently['cloudCover']
+def precip(hourly,current):
+    cloud_cover = current['clouds']
 
-    precip_prob = currently['precipProbability']
-    precip_type = currently.get('precipType')
+    precip_prob = hourly[0]['pop']
+    precip_type = hourly[0]['weather'][0]['main'].lower()
 
     if precip_type and precip_prob > 0:
         return  '{} {}% chance of {}'.format(
@@ -81,9 +76,9 @@ def precip(currently):
             precip_type
         )
 
-def wind(currently):
-    wind_speed = currently['windSpeed']
-    wind_bearing = currently['windBearing']
+def wind(current):
+    wind_speed = current['wind_speed']
+    wind_bearing = current['wind_deg']
 
     if wind_speed > 5:
         return '💨 winds about {}mph from the {}'.format(
@@ -91,29 +86,21 @@ def wind(currently):
             get_bearing(wind_bearing)
         )
 
-def visibility(currently):
-    vis = currently['visibility']
+def visibility(current):
+    vis = int(current['visibility'])
+    vis = vis * 0.00062137119223733
+    
     if vis < 5:
         return '🌁 {} miles of visibility'.format(vis)
 
-def nearest_storm(currently):
-    nearest_storm_distance = currently.get('nearestStormDistance', 0)
-    nearest_storm_bearing = currently.get('nearestStormBearing')
-
-    if nearest_storm_distance > 0:
-        return '⛈ nearest storm {} miles to the {}'.format(
-            nearest_storm_distance,
-            get_bearing(nearest_storm_bearing)
-        )
-
-def display_temp(temperature, units):
-    degrees = '℉' if units == 'us' else '℃'
+def display_temp(temperature):
+    degrees = '℉'
 
     return str(round(temperature)) + degrees
 
 
 def get_emoji(icon, temperature, cloud_cover):
-    if icon == 'clear-day':
+    if icon == '01d':
         if temperature > 75:
             return choice(['☀️', '☀️', '😎'])
 
@@ -122,32 +109,30 @@ def get_emoji(icon, temperature, cloud_cover):
 
         return '☀️'
 
-    if icon == 'rain':
-        if cloud_cover < 0.5:
+    if icon == '10d' or icon == '09d':
+        if cloud_cover < 50:
             return choice(['🌧', '☔️', '🌦'])
 
         return choice(['🌧', '☔️'])
 
     return {
-        'clear-night': '🌝',
-        'snow': choice(['❄️', '🌨', '☃️']),
-        'sleet': '🌨',
-        'wind': '🌬',
-        'fog': '🌁',
-        'cloudy': '☁️',
-        'partly-cloudy-day': '🌤',
-        'partly-cloudy-night': '⛅️',
+        '01n': '🌝',
+        '13d': choice(['❄️', '🌨', '☃️']),
+        '50d': '🌁',
+        '04d': '☁️',
+        '02d': '🌤',
+        '02n': '⛅️',
     }.get(icon, '')
 
 
 def get_cloud_cover_emoji(cloud_cover):
-    if cloud_cover < 0.2:
+    if cloud_cover < 20:
         return '☀️'
 
-    if cloud_cover < 0.5:
+    if cloud_cover < 50:
         return '🌤'
 
-    if cloud_cover < 0.9:
+    if cloud_cover < 90:
         return '🌥'
 
     return '☁️'
@@ -155,7 +140,7 @@ def get_cloud_cover_emoji(cloud_cover):
 
 def get_precip_emoji(precip_type, cloud_cover):
     if precip_type == 'rain':
-        if (cloud_cover < 0.5):
+        if (cloud_cover < 50):
             return choice(['🌧', '☔️', '🌦'])
 
         return choice(['🌧', '☔️'])

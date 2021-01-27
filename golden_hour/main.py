@@ -118,14 +118,13 @@ def main():
     if not args.skip_timelapse:
         timelapse.create_timelapse(args.duration, args.interval, timelapse_filename)
 
-    if 'darksky_key' in config:
-        darksky_key = config['darksky_key']
+    if 'openweather_key' in config:
+        openweather_key = config['openweather_key']
         sunset_time = sunset.get_today_sunset_time(location)
         forecast = weather.get_sunset_forecast(
-            darksky_key,
-            sunset_time,
-            lat_long=(location.latitude, location.longitude)
-        )
+            openweather_key,
+            lat=location.latitude,
+            long=location.longitude)
         status_text = weather.get_status_text(forecast, sunset_time)
     else:
         status_text = get_random_status_text()
