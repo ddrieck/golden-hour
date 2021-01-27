@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from random import choice
-from openweather import get_forecast
+from golden_hour.openweather import get_forecast
 
 def get_sunset_forecast(openweather_key, lat, long):
     # Get the forecast from *just before* sunset to avoid night-themed emoji
