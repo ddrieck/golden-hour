@@ -8,11 +8,11 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="golden_hour",
-    version="1.0.0",
+    version="1.1.0",
     description="Record a sunset timelapse and post it to Twitter with a weather report",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/alanhussey/golden-hour",
+    url="https://github.com/ddrieck/golden-hour",
     packages=find_packages(),
     entry_points={
         "console_scripts": [
@@ -22,12 +22,12 @@ setup(
     },
     install_requires=[
         "astral==1.3.4",
-        "darkskylib==0.3.6",
         "python-twitter==3.4.1",
         "pytz==2016.10",
         "PyYAML==3.12",
         "schema",
         "six==1.10.0",
+        "requests==2.25.1"
     ],
     include_package_data=True,
 )
