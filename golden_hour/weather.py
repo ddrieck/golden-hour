@@ -69,6 +69,9 @@ def precip(hourly,current):
     precip_prob = hourly[0]['pop']
     precip_type = hourly[0]['weather'][0]['main'].lower()
 
+    if precip_type == 'clouds':
+        precip_type == 'rain'
+
     if precip_type and precip_prob > 0:
         return  '{} {}% chance of {}'.format(
             get_precip_emoji(precip_type, cloud_cover),
@@ -148,7 +151,7 @@ def get_precip_emoji(precip_type, cloud_cover):
     if precip_type == 'snow':
         return choice(['❄️', '🌨', '☃️'])
 
-    if precip_type == 'sleet':
+    if precip_type == 'thunderstorm':
         return '🌨'
 
     return ''
