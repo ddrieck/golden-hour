@@ -67,10 +67,14 @@ def precip(hourly,current):
     cloud_cover = current['clouds']
 
     precip_prob = hourly[0]['pop']
-    precip_type = hourly[0]['weather'][0]['main'].lower()
-
-    if precip_type == 'clouds':
+    status_main = hourly[0]['weather'][0]['main'].lower()
+    precip_type = ''
+    
+    if status_main == 'clouds':
         precip_type == 'rain'
+    else:
+        precip_type == status_main
+
 
     if precip_type and precip_prob > 0:
         return  '{} {}% chance of {}'.format(
