@@ -70,7 +70,8 @@ def precip(hourly,current):
     precip_type = hourly[0]['weather'][0]['main'].lower()
 
     if precip_type == 'clouds':
-        precip_type == 'rain'
+        precip_type = 'rain'
+
 
     if precip_type and precip_prob > 0:
         return  '{} {}% chance of {}'.format(
