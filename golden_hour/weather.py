@@ -95,7 +95,7 @@ def visibility(current):
     vis = vis * 0.00062137119223733
     
     if vis < 5:
-        return '🌁 {} miles of visibility'.format(vis)
+        return '🌁 {} miles of visibility'.format(round(vis,2))
 
 def display_temp(temperature):
     degrees = '℉'
