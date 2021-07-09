@@ -8,7 +8,7 @@ import os
 import random
 import sys
 
-from golden_hour import configuration, sunset, timelapse, tweet, weather
+from golden_hour import configuration, timer, timelapse, tweet, weather
 from golden_hour.location import get_location
 
 logger = logging.getLogger()
@@ -77,6 +77,12 @@ def main():
         default=None,
         help='number of minutes before sunset to start timelapse',
     )
+    parser.add_argument('--start-before-sunrise',
+        metavar='minutes',
+        type=int,
+        default=None,
+        help='number of minutes before sunrise to start timelapse',
+    )
     parser.add_argument('--post-to-twitter',
         action='store_true',
         default=False,
@@ -113,14 +119,18 @@ def main():
             exit(2)
 
     if args.start_before_sunset is not None:
-        sunset.wait_for_sunset(location, args.start_before_sunset)
+        timer.wait_for_sunset(location, args.start_before_sunset)
+
+    if args.start_before_sunrise is not None:
+        timer.wait_for_sunrise(location, args.start_before_sunrise)
 
     if not args.skip_timelapse:
         timelapse.create_timelapse(args.duration, args.interval, timelapse_filename)
 
     if 'openweather_key' in config:
         openweather_key = config['openweather_key']
-        sunset_time = sunset.get_today_sunset_time(location)
+        #TODO conditional to determine if sunrise or sunser
+        sunset_time = timer.get_today_sunset_time(location)
         forecast = weather.get_sunset_forecast(
             openweather_key,
             lat=location.latitude,
