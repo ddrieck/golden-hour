@@ -46,7 +46,7 @@ def get_timelapse_filename(output_dir):
 def main():
     if sys.stdout.isatty():
         handler = logging.StreamHandler(sys.stdout)
-        logger.setLevel(logging.DEBUG)
+        logger.setLevel(logging.INFO)
     else:
         handler = logging.handlers.SysLogHandler(address='/dev/log')
         logger.setLevel(logging.INFO)

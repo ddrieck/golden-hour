@@ -47,11 +47,7 @@ See `example_config.yaml` for the format.
 
 [twitter-app]: https://apps.twitter.com
 
-##### Dark Sky *(optional)*
-
-If you want the weather report, [get a Dark Sky API key][dark-sky-api].
-
-[dark-sky-api]: https://darksky.net/dev
+##### Open Weather *(optional)*
 
 #### Running as a one-off
 
@@ -70,7 +66,7 @@ For another example, which uses a specially crafted `.sh` file and a virtualenv,
 
 ##### Where are the logs?
 
-When it is run by `cron`, by default `golden-hour` will send logs to syslog. You can monitor them with `tail -F /var/log/syslog`.
+When it is run by `cron`, by default `golden-hour` will send logs to syslog. You can monitor them with `tail -F /var/log/syslog`. Default logging is `INFO`.
 
 ##### Gotchas:
 
