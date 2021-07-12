@@ -16,7 +16,7 @@ def get_status_text(forecast, sun_time, time_of_day):
     return '\n'.join(
         filter(None, [
             '{}\n'.format(
-            time_of_day + 'at ',
+            time_of_day + ' at ',
             sun_time.strftime('%I:%M%p')),
             summary(hourly, current),
             temp(current),
