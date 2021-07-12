@@ -3,19 +3,21 @@ import datetime
 from random import choice
 from golden_hour.openweather import get_forecast
 
-def get_sunset_forecast(openweather_key, lat, long):
+def get_sun_forecast(openweather_key, lat, long):
     # Get the forecast from *just before* sunset to avoid night-themed emoji
     forecast = get_forecast(openweather_key, lat, long)
 
     return forecast
 
-def get_status_text(forecast, sunset_time):
+def get_status_text(forecast, sun_time, time_of_day):
     hourly = forecast['hourly']
     current = forecast['current']
 
     return '\n'.join(
         filter(None, [
-            '🌅 sunset at {}\n'.format(sunset_time.strftime('%I:%M%p')),
+            '{}\n'.format(
+            time_of_day + 'at ',
+            sun_time.strftime('%I:%M%p')),
             summary(hourly, current),
             temp(current),
             cloudiness(current),

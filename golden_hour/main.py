@@ -119,23 +119,27 @@ def main():
             exit(2)
 
     if args.start_before_sunset is not None:
-        timer.wait_for_sunset(location, args.start_before_sunset)
+        timer.wait_for_sun_time(location, 'sunset', args.start_before_sunset)
 
     if args.start_before_sunrise is not None:
-        timer.wait_for_sunrise(location, args.start_before_sunrise)
+        timer.wait_for_sun_time(location, 'sunrise', args.start_before_sunrise)
 
     if not args.skip_timelapse:
         timelapse.create_timelapse(args.duration, args.interval, timelapse_filename)
 
     if 'openweather_key' in config:
         openweather_key = config['openweather_key']
-        #TODO conditional to determine if sunrise or sunser
-        sunset_time = timer.get_today_sunset_time(location)
-        forecast = weather.get_sunset_forecast(
+        if args.start_before_sunset is not None:
+            time_of_day = 'sunset'
+        else:
+            time_of_day = 'sunrise'
+        
+        time = timer.get_today_sun_time(location, time_of_day)
+        forecast = weather.get_sun_forecast(
             openweather_key,
             lat=location.latitude,
             long=location.longitude)
-        status_text = weather.get_status_text(forecast, sunset_time)
+        status_text = weather.get_status_text(forecast, time, time_of_day)
     else:
         status_text = get_random_status_text()
 
