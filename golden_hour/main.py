@@ -8,7 +8,7 @@ import os
 import random
 import sys
 
-from golden_hour import configuration, timer, timelapse, tweet, weather
+from golden_hour import configuration, timer, timelapse, bluesky, weather
 from golden_hour.location import get_location
 
 logger = logging.getLogger()
@@ -83,16 +83,22 @@ def main():
         default=None,
         help='number of minutes before sunrise to start timelapse',
     )
-    parser.add_argument('--post-to-twitter',
+    parser.add_argument('--post-to-bluesky',
         action='store_true',
         default=False,
-        help='post video to twitter',
+        help='post video to bluesky',
     )
     parser.add_argument('--skip-timelapse',
         action='store_true',
         default=False,
         help='skip recording the timelapse (useful for debugging)',
     )
+    parser.add_argument('--debug',
+        action='store_true',
+        default=False,
+        help='enable debug logging',
+    )
+
     args = parser.parse_args()
 
     config = configuration.load_configuration(args.config_file)
@@ -103,19 +109,18 @@ def main():
         os.mkdir(output_dir)
     timelapse_filename = get_timelapse_filename(output_dir)
 
-    if args.post_to_twitter:
-        twitter_credentials = config['twitter']
-        logger.info('verifying twitter credentials')
-        tweet.TWITTER_CONFIG_SCHEMA.validate(twitter_credentials)
+    if args.post_to_bluesky:
+        bluesky_credentials = config['bluesky']
+        logger.info('verifying bluesky credentials')
 
         # check the expected length of the video to make sure it's within twitter's rules
         video_duration = calculate_timelapse_duration(args.duration, args.interval)
         logger.info('estimated video length: {} seconds'.format(video_duration))
         if video_duration < 5.0:
-            logger.error('Error: Timelapse video will be too short to upload to Twitter (min 5 seconds)')
+            logger.error('Error: Timelapse video will be too short to upload to Bluesky (min 5 seconds)')
             exit(1)
-        if video_duration > 30.0:
-            logger.error('Error: Timelapse video will be too long to upload to Twitter (max 30 seconds)')
+        if video_duration > 60.0:
+            logger.error('Error: Timelapse video will be too long to upload to Bluesky (max 30 seconds)')
             exit(2)
 
     if args.start_before_sunset is not None:
@@ -145,9 +150,9 @@ def main():
 
     logger.info(status_text)
 
-    if args.post_to_twitter and not args.skip_timelapse:
-        tweet.post_update(
-            config['twitter'],
+    if args.post_to_bluesky and not args.skip_timelapse:
+        bluesky.post_update(
+            config['bluesky'],
             status_text,
             media=timelapse_filename
         )
