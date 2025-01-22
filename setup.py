@@ -9,25 +9,22 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name="golden_hour",
     version="1.3.1",
-    description="Record a sunset timelapse and post it to Twitter with a weather report",
+    description="Record a sunset timelapse and post it to Bluesky with a weather report",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ddrieck/golden-hour",
     packages=find_packages(),
     entry_points={
         "console_scripts": [
-            "golden-hour=golden_hour.main:main",
-            "golden-hour-tweet=golden_hour.tweet:main"
-        ]
+            "golden-hour=golden_hour.main:main",        ]
     },
     install_requires=[
-        "astral==1.3.4",
-        "python-twitter==3.4.1",
-        "pytz==2016.10",
-        "PyYAML==3.12",
-        "schema",
-        "six==1.10.0",
-        "requests==2.25.1"
+        "astral==2.2",
+        "pytz==2023.3",
+        "PyYAML==6.0",
+        "schema==0.7.5",
+        "requests==2.31.0",
+        "atproto==0.0.6" 
     ],
     include_package_data=True,
 )
