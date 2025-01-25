@@ -103,8 +103,8 @@ def main():
 
     config = configuration.load_configuration(args.config_file)
     location = get_location(config['location'])
+    output_dir = '~/golden-hour-output'
 
-    output_dir = 'output'
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
     timelapse_filename = get_timelapse_filename(output_dir)
@@ -155,6 +155,17 @@ def main():
             config['bluesky'],
             status_text,
             media=timelapse_filename
+        )
+    if args.debug:
+        logger.setLevel(logging.DEBUG)
+        logger.debug('debug logging enabled')
+
+        status_text = "TEST POST:\n" + status_text
+        bluesky.post_update(
+            config['bluesky'],
+            status_text,
+            media='~/.config/golden-hour-debug.mp4',
+            debug=True
         )
 
     logger.info('done!')
