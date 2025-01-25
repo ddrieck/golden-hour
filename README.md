@@ -40,13 +40,13 @@ See `example_config.yaml` for the format.
 
 1. Create a Bluesky account.
     - It is recommended to use a name like "goldenhourXYZ", where XYZ is airport code or abbrevation for your city.
-2. No seperate developer console or app configuration is needed at this time. Bluesky is built on the [atproto libraries]. There is a python library available of [`PyPi`][pypi]
+2. No seperate developer console or app configuration is needed at this time. Bluesky is built on the [atproto libraries][atproto]. There is a python library available of [PyPi][pypi]
 
 [atproto]: https://docs.bsky.app/docs/get-started
 [pypi]: https://pypi.org/project/atproto/
 
 ##### Open Weather *(optional)*
-[`Open Weather`][openweather] is used to get weather information and post the weather and forecast at the location of the timelapse. Their free account should more than sufficient to run Golden Hour code. 
+[Open Weather][openweather] is used to get weather information and post the weather and forecast at the location of the timelapse. Their free account should more than sufficient to run Golden Hour code. 
 
 [openweather]: https://openweathermap.org/api
 
