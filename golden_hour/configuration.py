@@ -1,12 +1,12 @@
 import schema
 import yaml
 
-from golden_hour import tweet, location
+from golden_hour import bluesky, location
 
 
 GOLDENHOUR_CONFIGURATION_SCHEMA = schema.Schema({
     'location': location.LOCATION_CONFIG_SCHEMA,
-    schema.Optional('twitter'): tweet.TWITTER_CONFIG_SCHEMA,
+    schema.Optional('bluesky'): bluesky.BLUESKY_CONFIG_SCHEMA,
     schema.Optional('openweather_key'): str,
 })
 
