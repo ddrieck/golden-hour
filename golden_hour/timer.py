@@ -3,7 +3,6 @@ import logging
 import math
 import time
 
-from astral import Astral
 import pytz
 
 
