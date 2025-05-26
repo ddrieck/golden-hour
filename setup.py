@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="golden_hour",
-    version="1.3.1",
+    version="1.3.2",
     description="Record a sunset timelapse and post it to Bluesky with a weather report",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -21,10 +21,10 @@ setup(
     install_requires=[
         "astral==2.2",
         "pytz==2023.3",
-        "PyYAML==6.0",
+        "PyYAML==6.0.2",
         "schema==0.7.5",
         "requests==2.31.0",
-        "atproto==0.0.6" 
+        "atproto==0.0.61" 
     ],
     include_package_data=True,
 )
