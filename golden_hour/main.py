@@ -103,7 +103,7 @@ def main():
 
     config = configuration.load_configuration(args.config_file)
     location = get_location(config['location'])
-    output_dir = os.expanduser('~/golden-hour-output')
+    output_dir = os.path.expanduser('~/golden-hour-output')
 
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
