@@ -1,4 +1,6 @@
 from astral import LocationInfo
+from astral.sun import sun 
+
 import schema
 
 # Lowest reasonable elevation is Death Valley, about 100m below sea level.
