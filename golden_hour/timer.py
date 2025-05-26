@@ -2,6 +2,7 @@ import datetime
 import logging
 import math
 import time
+from astral.sun import sun
 
 import pytz
 
@@ -16,10 +17,14 @@ def get_current_time_in_timezone(location):
 
 def get_today_sun_time(location, time_of_day):
     today = get_current_time_in_timezone(location).date()
+    sun_times = sun(location.observer, date=today)
+    if time_of_day not in ['sunrise', 'sunset']:
+        logger.error('ERROR: time_of_day must be either "sunrise" or "sunset"')
+        exit()
     if time_of_day == 'sunset':
-        return location.sun(today)['sunset']
+        return sun_times['sunset']
     else:
-        return location.sun(today)['sunrise']
+        return sun_times['sunrise']
 
 def get_seconds_until(earlier_time, later_time):
     tdelta = later_time - earlier_time
