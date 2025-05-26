@@ -13,6 +13,6 @@ GOLDENHOUR_CONFIGURATION_SCHEMA = schema.Schema({
 
 def load_configuration(config_file_path):
     with open(config_file_path) as config_file:
-        config = yaml.load(config_file.read())
+        config = yaml.safe_load(config_file.read())
 
     return GOLDENHOUR_CONFIGURATION_SCHEMA.validate(config)
