@@ -18,7 +18,7 @@ def capture(output_dir, duration, interval):
     start_number_files = len(os.listdir(output_dir))
     try:
         subprocess.check_call([
-            'raspistill',
+            'rpicam-still',
             '-t', str(duration * 1000),
             '-tl', str(interval * 1000),
             '-n', # don't try to show a preview window
