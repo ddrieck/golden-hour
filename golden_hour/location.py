@@ -1,4 +1,4 @@
-from astral import Astral, Location
+from astral import LocationInfo
 import schema
 
 # Lowest reasonable elevation is Death Valley, about 100m below sea level.
@@ -26,9 +26,9 @@ def get_location(location_config):
 
     if type(location_config) == str:
         # This should be a string that Astral recognizes out of the box
-        return Astral()[location_config]
+        return LocationInfo()[location_config]
     else:
-        location = Location()
+        location = LocationInfo()
         location.latitude = location_config['latitude']
         location.longitude = location_config['longitude']
         location.timezone = location_config['timezone']
