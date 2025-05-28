@@ -142,9 +142,14 @@ def main():
         time = timer.get_today_sun_time(location, time_of_day)
         forecast = weather.get_sun_forecast(
             openweather_key,
-            lat=location.latitude,
-            long=location.longitude)
-        status_text = weather.get_status_text(forecast, time, time_of_day)
+            latitude=location.latitude,
+            longitude=location.longitude)
+        current = weather.get_current_weather(
+            openweather_key,
+            latitude=location.latitude,
+            longitude=location.longitude
+        )
+        status_text = weather.get_status_text(forecast, current, time, time_of_day)
     else:
         status_text = get_random_status_text()
 
