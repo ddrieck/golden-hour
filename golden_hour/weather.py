@@ -37,7 +37,7 @@ def summary(hourly, current):
 
     icon = current['weather'][0]['icon']
     cloud_cover = current['clouds']
-    temperature = current['temp']
+    temperature = current['main']['temp']
 
     return '{} {}'.format(
         get_emoji(icon, temperature, cloud_cover),
@@ -45,8 +45,8 @@ def summary(hourly, current):
     )
 
 def temp(current):
-    temperature = current['temp']
-    feels_like = current['feels_like']
+    temperature = current['main']['temp']
+    feels_like = current['main']['feels_like']
 
     feels_like = (
         ''
@@ -61,7 +61,7 @@ def temp(current):
 
 
 def cloudiness(current):
-    cloud_cover = current['clouds']
+    cloud_cover = current['clouds']['all']
 
     if cloud_cover > 1:
         return '{} {}% cloud cover'.format(
@@ -70,7 +70,7 @@ def cloudiness(current):
         )
 
 def precip(hourly,current):
-    cloud_cover = current['clouds']
+    cloud_cover = current['clouds']['all']
 
     precip_prob = hourly[0]['pop']
     precip_type = hourly[0]['weather'][0]['main'].lower()
@@ -87,8 +87,8 @@ def precip(hourly,current):
         )
 
 def wind(current):
-    wind_speed = current['wind_speed']
-    wind_bearing = current['wind_deg']
+    wind_speed = current['wind']['speed']
+    wind_bearing = current['wind']['deg']
 
     if wind_speed > 5:
         return '💨 winds about {}mph from the {}'.format(
