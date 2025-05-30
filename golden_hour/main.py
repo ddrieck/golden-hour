@@ -165,11 +165,11 @@ def main():
         logger.setLevel(logging.DEBUG)
         logger.debug('debug logging enabled')
 
-        status_text = "TEST POST:\n" + status_text
+        test_status_text = "TEST POST:\n" + status_text
         bluesky.post_update(
             config['bluesky'],
-            status_text,
-            media='~/.config/golden-hour-debug.mp4',
+            test_status_text,
+            media=os.path.expanduser('~/.config/golden-hour-debug.mp4'),
             debug=True
         )
 

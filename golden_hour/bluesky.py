@@ -5,6 +5,8 @@ import schema
 
 logger = logging.getLogger(__name__)
 
+# I don't think this actually does anything. The whole validation process seems broken and needs to be fixed before go live.
+""""
 def load_credentials_from_file(filepath):
     ''' Load credentials from a YAML file.
     Supports files with bluesky configuration parameters under a "bluesky" key, or at the top level.
@@ -33,35 +35,12 @@ BLUESKY_CONFIG_SCHEMA = schema.And(
     },
     verify_credentials
 )
-
-def post_update(credentials, text, media=None):
-    
-
-    media_id = None
-    if media:
-        with open(media, 'rb') as mediafile:
-            media_id = api.UploadMediaChunked(mediafile)
-
-    api.PostUpdate(text, media=media_id)
+"""
 
 def authenticate(username, password):
     client = Client()
     client.login(username, password)
     return client
-
-def validate_config(config_path):
-    logger.debug(f"Loading config from {config_path}")
-    with open(config_path, 'r') as file:
-        config = yaml.safe_load(file)
-    
-    required_keys = ['username', 'password', 'api_url']
-    for key in required_keys:
-        if key not in config:
-            logger.error(f"Missing required config key: {key}")
-            raise ValueError(f"Missing required config key: {key}")
-    
-    logger.info("Config validation successful")
-    return config
 
 def debug_authentication(client):
     try:
@@ -73,15 +52,11 @@ def debug_authentication(client):
         logger.error(f"Debug authentication failed: {e}")
         return False
 
-def post_update(config_path, status_text, video_path, debug=False):
+def post_update(credentials, status_text, video_path, debug=False):
     logger.info(f"Attempting to post update with video: {video_path}")
-    config = validate_config(config_path)
-    client = authenticate(config['identifier'], config['password'])
+    client = authenticate(credentials['identifier'], credentials['password'])
 
-    BLUESKY_CONFIG_SCHEMA.validate(credentials)
-
-    logger.info('posting to bluesky (status_text: {}, media: {})'.format(text, media))
-    api = bluesky.Api(**credentials)
+    logger.info('posting to bluesky (status_text: {}, media: {})'.format(status_text, video_path))
     
     if debug:
         if not debug_authentication(client):
